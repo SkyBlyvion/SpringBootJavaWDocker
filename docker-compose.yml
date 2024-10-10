@@ -1,0 +1,52 @@
+# spring boot orchestration
+volumes:
+  immocfadb:
+
+networks:
+  spimmonetwork:
+
+services:
+
+  # container spring
+  # HotReloading, donc on a notre port 35729 qui sera dedié au HotReloading.
+  # pour améliorer la rapidité de notre container, le dl et install,
+  # on crée un volume de persistance pour les librairies et le cache
+  springimmo:
+    build:
+      context: ./
+    container_name: immo
+    ports:
+      - "8181:8181"
+      - "35729:35729"
+    volumes:
+      - ./app:/app
+      - ./gradle-cache:/root/.gradle
+    depends_on:
+      - db
+    networks:
+      - spimmonetwork
+    tty: true
+
+  # container base de donnée
+  # étant donné que les bdd ont toujours un user root, on passe une commande pour changer le plugin d'utilisation du
+  # mot de passe Root, rendant la bdd plus sécurisée.
+  # Mettre tout en place pour que cela soit le plus long possible pour le pirate.
+  # L'optique est de RALENTIR.
+  db:
+    image: mariadb:latest
+    container_name: mdb
+    ports:
+      - "3314:3306"
+    environment:
+      MARIADB_ROOT_PASSWORD: admin
+      MARIADB_DATABASE: immo
+      MARIADB_USER: immocfa
+      MARIADB_PASSWORD: admin
+    command:
+      - --default-authentication-plugin=mysql_native_password
+    restart: always
+    volumes:
+      - immocfadb:/var/lib/mysql
+    networks:
+      - spimmonetwork
+
