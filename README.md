@@ -37,7 +37,12 @@ rootProject.name = 'immo'
 ````docker exec -it immo ./gradlew bootrun````
 - dans un nouveau terminal 3:
 ````docker exec -it immo ./gradlew build --continuous````
-- On va déclarer une route afin d'accéder a notre url https://localhost:8181
+- On va déclarer une route afin d'accéder à notre url https://localhost:8181
+- Facets: créer une liaison pour l'IDE, ce sonts les plugins de Spring![img.png](img.png) 
+Sinon passer par Plugins et install Spring
+- Maintenant on crée un import dans ImmoApplication = import.org.springframework.stereotype.Controller
+
+
 
 ## Pour la Documentation JAVA, https://www.jmdoudoux.fr/java/dej/index.htm
 
